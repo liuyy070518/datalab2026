@@ -50,7 +50,9 @@ int bitXor(int x, int y) {
  *   1 if x and y have the same sign , 0 otherwise.
  */
 int samesign(int x, int y) {
-    return 2;
+    if (!x && !y) return 1;
+    else if (x && y) return !((x ^ y) >> 31);
+    else return 0;
 }
 
 /*
