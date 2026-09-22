@@ -99,6 +99,7 @@ int logtwo(int v) {
  */
 int byteSwap(int x, int n, int m) {
     return 2;
+    abcdefg
 }
 
 /*
