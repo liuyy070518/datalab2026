@@ -67,6 +67,7 @@ int samesign(int x, int y) {
 int logtwo(int v) {
     int x;
     int r = 0;
+
     x = ((v >> 16) > 0) << 4;
     r = r | x;
     v = v >> x;
@@ -81,11 +82,10 @@ int logtwo(int v) {
 
     x = ((v >> 2) > 0) << 1;
     r = r | x;
-    v = v >> 2;
-    
+    v = v >> x;
+
     x = (v >> 1) > 0;
-    r = r | x;
-    return r;
+    return r | x;
 }
 
 /*
