@@ -99,7 +99,7 @@ int logtwo(int v) {
  */
 int byteSwap(int x, int n, int m) {
     int na = n << 3;
-    int ma = n << 3;
+    int ma = m << 3;
     int nb = (x >> na) & 0xFF;
     int mb = (x >> ma) & 0xFF;
     int c = nb ^ mb;
