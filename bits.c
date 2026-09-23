@@ -104,7 +104,7 @@ int byteSwap(int x, int n, int m) {
     int mb = (x >> ma) & 0xFF;
     int c = nb ^ mb;
 
-    return x ^ ((diff << na) | (diff << ma));
+    return x ^ ((x << na) | (x<< ma));
     
 }
 
