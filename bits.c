@@ -98,8 +98,14 @@ int logtwo(int v) {
  *    Difficulty: 2
  */
 int byteSwap(int x, int n, int m) {
-    return 2;
-    abcdefg
+    int na = n << 3;
+    int ma = n << 3;
+    int nb = (x >> na) & 0xFF;
+    int mb = (x >> ma) & 0xFF;
+    int c = nb ^ mb;
+
+    return x ^ ((diff << na) | (diff << ma));
+    
 }
 
 /*
