@@ -136,7 +136,9 @@ unsigned reverse(unsigned v) {
  *   Difficulty: 3
  */
 int logicalShift(int x, int n) {
-    return 2;
+    x = x >> n;
+    int y = ~(((1 << 31) >> n) << 1);
+    return x & y;
 }
 
 /*
@@ -148,7 +150,32 @@ int logicalShift(int x, int n) {
  *   Difficulty: 4
  */
 int leftBitCount(int x) {
-    return 2;
+    x = ~x;
+    int count = 0;
+    int y;
+    
+    y = (!(x >> 16)) << 4;
+    count += y;
+    x = x << y;
+
+    y = (!(x >> 24)) << 3;
+    count += y;
+    x = x << y;
+
+    y = (!(x >> 28)) << 2;
+    count += y;
+    x = x << y;
+
+    y = (!(x >> 30)) << 1;
+    count += y;
+    x = x << y;
+
+    y = !(x >> 31);
+    count += y;
+    x = x << y;
+
+    count += (!x);
+    return count;
 }
 
 /*
