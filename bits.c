@@ -187,7 +187,37 @@ int leftBitCount(int x) {
  *   Difficulty: 4
  */
 unsigned float_i2f(int x) {
-    return 2;
+    unsigned ux = x;
+    unsigned sign = ux & 0x80000000u;
+    unsigned exp = 158;
+    unsigned frac;
+    unsigned tail;
+
+    if (!x) {
+        return 0;
+    }
+
+    if (sign) {
+        ux = ~ux + 1;
+    }
+
+    while (!(ux & 0x80000000u)) {
+        ux = ux << 1;
+        exp = exp - 1;
+    }
+
+    frac = (ux >> 8) & 0x7FFFFFu;
+    tail = ux & 0xFFu;
+
+    if (tail > 0x80u) {
+        frac = frac + 1;
+    } else if (tail == 0x80u) {
+        if (frac & 1) {
+            frac = frac + 1;
+        }
+    }
+
+    return sign + (exp << 23) + frac;
 }
 
 /*
@@ -202,9 +232,25 @@ unsigned float_i2f(int x) {
  *   Difficulty: 4
  */
 unsigned floatScale2(unsigned uf) {
-    return 2;
-}
+    unsigned sign = uf & 0x80000000u;
+    unsigned exp = (uf >> 23) & 0xFFu;
+    unsigned frac = uf & 0x7FFFFFu;
+    if (exp == 0xFFu){
+        return uf;
+    }
+    
+    if (exp == 0){
+        frac = frac << 1;
+        return sign | frac;
+    }
+    exp = exp + 1;
 
+    if(exp == 0xFFu){
+        frac = 0;
+    }
+
+    return sign | (exp << 23) | frac;
+}
 /*
  * float64_f2i - Convert a 64-bit IEEE 754 floating-point number to a 32-bit signed integer.
  *   The conversion rounds towards zero.
@@ -219,7 +265,28 @@ unsigned floatScale2(unsigned uf) {
  *   Difficulty: 3
  */
 int float64_f2i(unsigned uf1, unsigned uf2) {
-    return 2;
+    unsigned sign = uf2 >> 31;
+    unsigned exp = (uf2 >> 20) & 0x7FFu;
+    unsigned frac2 = (uf2 & 0xFFFFFu) | 0x100000u;
+    int e;
+    int result;
+    if(exp < 1023u){
+        return 0;
+    }
+    e = exp - 1023;
+    if(e >= 31){
+        return 0x80000000u;
+    }
+    if(e <= 20){
+        result = frac2 >> (20 - e);
+    }
+    else{
+        result = (frac2 << (e - 20)) | (uf1 >> (52 - e));
+    }
+    if(sign){
+        result = -result;
+    }
+    return result;
 }
 
 /*
@@ -236,5 +303,14 @@ int float64_f2i(unsigned uf1, unsigned uf2) {
  *   Difficulty: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+    if(x < -149){
+        return 0;
+    }
+    if(x < -126){
+        return 1u << (x + 149);
+    }
+    if(x <= 127){
+        return (x + 127) << 23;
+    }
+    return 0x7F800000;
 }
